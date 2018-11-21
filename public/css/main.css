@@ -1,0 +1,62 @@
+@import url("./forms.css");
+@import url("./product.css");
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+button {
+  border-radius: 3px;
+  border: 2px solid #5901a1;
+  background-color: #fff;
+  color: #333;
+  padding: 0.5rem 1rem;
+  text-transform: uppercase;
+  transition: 0.3s linear;
+}
+button:hover,
+button:active,
+button.active {
+  background-color: #5901a1;
+  color: #fff;
+  cursor: pointer;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: stretch;
+}
+
+.card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  margin-top: 20px;
+}
+
+.card__header,
+.card__content {
+  padding: 1rem;
+}
+
+.card__header h1,
+.card__content h1,
+.card__content h2,
+.card__content p {
+  margin: 0;
+}
+
+.card__image {
+  width: 100%;
+}
+
+.card__image img {
+  width: 100%;
+}
+
+.card__actions {
+  padding: 1rem;
+  text-align: center;
+}
