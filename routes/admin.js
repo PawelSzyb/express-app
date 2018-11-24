@@ -10,7 +10,10 @@ const products = [];
 // @route   GET admin/add-product
 // @desc    get the list of products
 router.get("/add-product", (req, res) => {
-  res.sendFile(path.join(rootDirectory, "views", "add-product.html"));
+  res.render("add-product", {
+    pageTitle: "Add-Product",
+    path: "/admin/add-product"
+  });
 });
 
 // @route   GET admin/add-product

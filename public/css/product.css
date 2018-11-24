@@ -30,3 +30,12 @@
   background-color: #fff;
   color: #5901a1;
 }
+.product__title,
+.product__price,
+.product__description {
+  text-align: center;
+}
+.product__price,
+.product__description {
+  color: #333;
+}
