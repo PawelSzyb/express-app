@@ -4,10 +4,21 @@
       <li class="main-header__item <%= path === '/' ? 'active' : '' %>">
         <a href="/">Shop</a>
       </li>
+      <li class="main-header__item <%= path === '/products' ? 'active' : '' %>">
+        <a href="/products">Products</a>
+      </li>
+      <li class="main-header__item <%= path === '/cart' ? 'active' : '' %>">
+        <a href="/cart">Cart</a>
+      </li>
       <li
         class="main-header__item <%= path === '/admin/add-product' ? 'active' : '' %>"
       >
         <a href="/admin/add-product">Add-Product</a>
+      </li>
+      <li
+        class="main-header__item <%= path === '/admin/products' ? 'active' : '' %>"
+      >
+        <a href="/admin/products">Admin-Products</a>
       </li>
     </ul>
   </nav>
