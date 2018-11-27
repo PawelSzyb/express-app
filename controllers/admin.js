@@ -8,7 +8,8 @@ exports.addProductPage = (req, res) => {
 };
 
 exports.addProductData = (req, res) => {
-  const products = new Product(req.body.title);
+  const { title, imgUrl, description, price } = req.body;
+  const products = new Product(title, imgUrl, description, price);
   products.saveProduct();
   res.redirect("/");
 };

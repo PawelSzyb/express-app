@@ -11,10 +11,12 @@
   text-transform: uppercase;
 }
 .form-control label,
-.form-control input {
+.form-control input,
+.form-control textarea {
   display: block;
 }
-.form-control input {
+.form-control input,
+.form-control textarea {
   font: inherit;
   border: 2px solid #5901a1;
   color: #333;

@@ -48,12 +48,13 @@ button.active {
   margin: 10px 0;
 }
 
-.card__image {
+.card-image {
   width: 100%;
 }
 
-.card__image img {
+.card-image img {
   width: 100%;
+  max-width: 350px;
 }
 
 .card__actions {
