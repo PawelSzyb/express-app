@@ -16,13 +16,20 @@ exports.getIndexPage = (req, res) => {
   });
 };
 
-exports.getCartPage = (req, res) => {
-  res.render("shop/cart", { path: "/cart", pageTitle: "Your Cart" });
-};
-
 exports.getCheckoutPage = (req, res) => {
   res.render("shop/checkout", {
     path: "/checkout",
     pageTitle: "Checkout"
   });
+};
+
+exports.getOrdersPage = (req, res) => {
+  res.render("shop/orders", {
+    path: "/orders",
+    pageTitle: "Your Orders"
+  });
+};
+
+exports.getCartPage = (req, res) => {
+  res.render("shop/cart", { path: "/cart", pageTitle: "Your Cart" });
 };

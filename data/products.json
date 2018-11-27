@@ -1,1 +1,9 @@
-[{"title":"Another new book","imgUrl":"https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg","description":"Another great book","price":"18.99"},{"title":"Some other","imgUrl":"https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg","description":"Some other book\r\n","price":"17.99"}]
+[
+  {
+    "id": "12342",
+    "title": "Another new book",
+    "imgUrl": "https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg",
+    "description": "Another great book",
+    "price": "18.99"
+  }
+]

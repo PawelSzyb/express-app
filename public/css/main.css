@@ -7,7 +7,8 @@ body {
   box-sizing: border-box;
   font-family: sans-serif;
 }
-button {
+button,
+.card__actions a {
   border-radius: 3px;
   border: 2px solid #5901a1;
   background-color: #fff;
@@ -15,10 +16,16 @@ button {
   padding: 0.5rem 1rem;
   text-transform: uppercase;
   transition: 0.3s linear;
+  margin: 10px;
+  text-decoration: none;
+  font-size: 0.9rem;
 }
 button:hover,
 button:active,
-button.active {
+button.active,
+.card__actions a.active,
+.card__actions a:active,
+.card__actions a:hover {
   background-color: #5901a1;
   color: #fff;
   cursor: pointer;
@@ -60,4 +67,6 @@ button.active {
 .card__actions {
   padding: 1rem;
   text-align: center;
+  display: flex;
+  justify-content: center;
 }
