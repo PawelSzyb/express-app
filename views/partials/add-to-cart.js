@@ -1,0 +1,6 @@
+<form action="/cart" method="POST">
+  <input type="hidden" name="product_id" value="<%= product.id %>" />
+  <button type="submit" class="btn">
+    Add to Cart
+  </button>
+</form>;

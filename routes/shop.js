@@ -7,7 +7,11 @@ router.get("/", shopController.getIndexPage);
 
 router.get("/products", shopController.getProductsPage);
 
+router.get("/products/:id", shopController.getSingleProduct);
+
 router.get("/cart", shopController.getCartPage);
+
+router.post("/cart", shopController.postCartItem);
 
 router.get("/orders", shopController.getOrdersPage);
 
