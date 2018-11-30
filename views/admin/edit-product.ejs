@@ -1,7 +1,11 @@
 <%- include("../partials/header.ejs") %> <%- include("../partials/navbar.ejs")
 %>
 <main>
-  <form class="product-form" action="/admin/add-product" method="POST">
+  <form
+    class="product-form"
+    action="<%= editing? '/admin/edit-product' : '/admin/add-product' %>"
+    method="POST"
+  >
     <div class="form-control">
       <label for="Description">Title</label>
       <input type="text" name="title" id="title" />
@@ -18,7 +22,9 @@
       <label for="description">Description</label>
       <textarea name="description" id="description" rows="5"></textarea>
     </div>
-    <button type="submit">Add Product</button>
+    <button type="submit">
+      <%= editing? "Update Product" :" Add Product" %>
+    </button>
   </form>
 </main>
 <%- include("../partials/footer.ejs") %>
