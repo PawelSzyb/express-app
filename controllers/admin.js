@@ -10,7 +10,7 @@ exports.addProductPage = (req, res) => {
 
 exports.addProductData = (req, res) => {
   const { title, imgUrl, description, price } = req.body;
-  const products = new Product(title, imgUrl, description, price);
+  const products = new Product(null, title, imgUrl, description, price);
   products.saveProduct();
   res.redirect("/");
 };
@@ -33,6 +33,19 @@ exports.getEditProductPage = (req, res) => {
       product
     });
   });
+};
+
+exports.postEditProductData = (req, res) => {
+  const { product_id, title, imgUrl, description, price } = req.body;
+  const updatedProduct = new Product(
+    product_id,
+    title,
+    imgUrl,
+    description,
+    price
+  );
+  updatedProduct.saveProduct();
+  res.redirect("/admin/products");
 };
 
 exports.getProductsPage = (req, res) => {
