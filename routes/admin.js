@@ -12,15 +12,19 @@ router.get("/add-product", adminController.addProductPage);
 router.get("/products", adminController.getProductsPage);
 
 // @route   POST admin/add-product
-// @desc    adding product to an array
+// @desc    adding product
 router.post("/add-product", adminController.addProductData);
 
 // @route   GET admin/products
-// @desc    get form with product data
+// @desc    get form with product data to edit
 router.get("/edit-product/:id", adminController.getEditProductPage);
 
 // @route   POST admin/edit-product
 // @desc    update product with data from form
 router.post("/edit-product", adminController.postEditProductData);
+
+// @route   POST admin/edit-product
+// @desc    delete product
+router.post("/delete-product", adminController.deleteProduct);
 
 module.exports = router;

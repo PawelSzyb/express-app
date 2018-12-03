@@ -23,6 +23,10 @@ router.get("/cart", shopController.getCartPage);
 // @desc    add product to the cart
 router.post("/cart", shopController.postCartItem);
 
+// @route   POST /cart-delete-item"
+// @desc    delete product from the cart
+router.post("/cart-delete-item", shopController.deleteCartItem);
+
 // @route   GET /orders
 // @desc    get page to order
 router.get("/orders", shopController.getOrdersPage);
