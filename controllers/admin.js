@@ -12,8 +12,10 @@ exports.addProductPage = (req, res) => {
 exports.addProductData = (req, res) => {
   const { title, imgUrl, description, price } = req.body;
   const products = new Product(null, title, imgUrl, description, price);
-  products.saveProduct();
-  res.redirect("/");
+  products
+    .saveProduct()
+    .then(() => res.redirect("/"))
+    .catch(err => console.log(err));
 };
 
 exports.getEditProductPage = (req, res) => {
