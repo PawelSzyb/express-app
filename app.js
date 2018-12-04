@@ -1,11 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
+const db = require("./utils/database");
 
 const app = express();
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
+
+db.execute("SELECT * FROM products");
 
 const errorsController = require("./controllers/errors");
 
