@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 
+const sequelize = require("./utils/database");
+
 const app = express();
 
 const adminRoutes = require("./routes/admin");
@@ -21,4 +23,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(errorsController.get404Page);
 
-app.listen(3000, () => console.log(`Server started at port ${3000}`));
+sequelize
+  .sync()
+  .then(app.listen(3000, () => console.log(`Server started at port ${3000}`)))
+  .catch(err => console.log(err));

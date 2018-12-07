@@ -15,11 +15,10 @@ exports.getProductsPage = (req, res) => {
 
 exports.getSingleProduct = (req, res) => {
   const product_id = req.params.id;
-  Product.findProductById(product_id)
-    .then(([product]) => {
-      console.log(product);
+  Product.findByPk(product_id)
+    .then(product => {
       res.render("shop/product-details", {
-        product: product[0],
+        product: product,
         pageTitle: product.title,
         path: "/products"
       });
@@ -28,17 +27,15 @@ exports.getSingleProduct = (req, res) => {
 };
 
 exports.getIndexPage = (req, res) => {
-  Product.fetchAllProducts()
-    .then(([rows, fieldData]) => {
+  Product.findAll()
+    .then(products => {
       res.render("shop/index", {
-        products: rows,
+        products,
         path: "/",
         pageTitle: "Shop"
       });
     })
-    .catch(err => {
-      console.log(err);
-    });
+    .catch(err => console.log(err));
 };
 
 exports.getCheckoutPage = (req, res) => {
