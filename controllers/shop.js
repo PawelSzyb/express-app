@@ -46,16 +46,24 @@ exports.getCheckoutPage = (req, res) => {
 };
 
 exports.getOrdersPage = (req, res) => {
-  res.render("shop/orders", {
-    path: "/orders",
-    pageTitle: "Your Orders"
-  });
+  req.user
+    .getOrders({ include: ["products"] })
+    .then(orders => {
+      res.render("shop/orders", {
+        path: "/orders",
+        pageTitle: "Your Orders",
+        orders
+      });
+    })
+    .catch(err => console.log(err));
 };
 
 exports.postOrderList = (req, res) => {
+  let fetchedCart;
   req.user
     .getCart()
     .then(cart => {
+      fetchedCart = cart;
       return cart.getProducts();
     })
     .then(products => {
@@ -72,8 +80,9 @@ exports.postOrderList = (req, res) => {
         .catch(err => console.log(err));
     })
     .then(() => {
-      res.redirect("/orders");
+      return fetchedCart.setProducts(null);
     })
+    .then(() => res.redirect("/orders"))
     .catch(err => console.log(err));
 };
 

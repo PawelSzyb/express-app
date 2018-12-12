@@ -1,4 +1,21 @@
 <%- include("../partials/header.ejs") %> <%- include("../partials/navbar.ejs")
 %>
-<main><h1>Hello from orders</h1></main>
+<main>
+  <% if(orders.length <= 0 ) {%>
+  <h2>Nothing there...</h2>
+  <% } else { %>
+  <ul>
+    <% orders.forEach(order => { %>
+    <li>
+      <h3># <%= order.id %></h3>
+      <ul>
+        <% order.products.forEach(product => { %>
+        <li><%= product.title %> - <%= product.orderItem.quantity %></li>
+        <% }) %>
+      </ul>
+    </li>
+    <% }) %>
+  </ul>
+  <% } %>
+</main>
 %> <%- include("../partials/footer.ejs") %>
