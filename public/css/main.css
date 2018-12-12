@@ -1,5 +1,6 @@
 @import url("./forms.css");
 @import url("./product.css");
+@import url("./cart.css");
 
 body {
   margin: 0;
@@ -29,6 +30,14 @@ button.active,
   background-color: #5901a1;
   color: #fff;
   cursor: pointer;
+}
+button.danger {
+  border: 2px solid crimson;
+}
+button.danger:hover,
+button.danger:active,
+button.danger.active {
+  background-color: crimson;
 }
 
 .grid {

@@ -6,6 +6,10 @@ const sequelize = require("./utils/database");
 
 const Product = require("./models/Product");
 const User = require("./models/User");
+const Cart = require("./models/Cart");
+const CartItem = require("./models/CartItem");
+const OrderItem = require("./models/OrderItem");
+const Order = require("./models/Order");
 
 const app = express();
 
@@ -38,6 +42,16 @@ app.use(errorsController.get404Page);
 Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 User.hasMany(Product);
 
+User.hasOne(Cart);
+Cart.belongsTo(User);
+
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
+
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, { through: OrderItem });
+
 sequelize
   // .sync({ force: true })
   .sync()
@@ -52,7 +66,9 @@ sequelize
   })
   .then(user => {
     // console.log(user);
+    return user.createCart();
+  })
+  .then(cart => {
     app.listen(3000, () => console.log(`Server started at port ${3000}`));
   })
-
   .catch(err => console.log(err));

@@ -1,0 +1,19 @@
+.cart__item-list {
+  width: 50%;
+  margin: 40px auto;
+  list-style: none;
+  padding: 0;
+  text-transform: uppercase;
+}
+.cart__item-list .cart__item {
+  padding: 20px;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  display: flex;
+  justify-content: space-between;
+}
+
+.cart__item-list + form {
+  width: 50%;
+  margin: 0 auto;
+}
