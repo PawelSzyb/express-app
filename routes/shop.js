@@ -17,24 +17,24 @@ router.get("/products/:id", shopController.getSingleProduct);
 
 // @route   GET /cart
 // @desc    get the cart of products
-router.get("/cart", shopController.getCartPage);
+// router.get("/cart", shopController.getCartPage);
 
 // @route   POST /cart
 // @desc    add product to the cart
-router.post("/cart", shopController.postCartItem);
+// router.post("/cart", shopController.postCartItem);
 
 // @route   POST /cart-delete-item"
 // @desc    delete product from the cart
-router.post("/cart-delete-item", shopController.deleteCartItem);
+// router.post("/cart-delete-item", shopController.deleteCartItem);
 
 // @route   GET /orders
 // @desc    get page to order
-router.get("/orders", shopController.getOrdersPage);
+// router.get("/orders", shopController.getOrdersPage);
 
 // @route   POST /orders
 // @desc    Create order list
-router.post("/create-order", shopController.postOrderList);
+// router.post("/create-order", shopController.postOrderList);
 
-router.get("/checkout", shopController.getCheckoutPage);
+// router.get("/checkout", shopController.getCheckoutPage);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 const Product = require("../models/Product");
-const Cart = require("../models/Cart");
+// const Cart = require("../models/Cart");
 
 exports.addProductPage = (req, res) => {
   res.render("admin/edit-product", {
@@ -10,15 +10,10 @@ exports.addProductPage = (req, res) => {
 };
 
 exports.addProductData = (req, res) => {
-  const { title, imageUrl, description, price } = req.body;
-  console.log(req);
-  req.user
-    .createProduct({
-      title,
-      price,
-      imageUrl,
-      description
-    })
+  const { title, price, description, imageUrl } = req.body;
+  const product = new Product(title, price, description, imageUrl);
+  product
+    .save()
     .then(result => res.redirect("/admin/products"))
     .catch(err => console.log(err));
 };
@@ -71,15 +66,14 @@ exports.addProductData = (req, res) => {
 //     .catch(err => console.log(err));
 // };
 
-// exports.getProductsPage = (req, res) => {
-//   req.user
-//     .getProducts()
-//     .then(products => {
-//       res.render("admin/products", {
-//         products,
-//         path: "/admin/products",
-//         pageTitle: "Admin Products"
-//       });
-//     })
-//     .catch(err => console.log(err));
-// };
+exports.getProductsPage = (req, res) => {
+  Product.fetchAll()
+    .then(products => {
+      res.render("admin/products", {
+        products,
+        path: "/admin/products",
+        pageTitle: "Admin Products"
+      });
+    })
+    .catch(err => console.log(err));
+};

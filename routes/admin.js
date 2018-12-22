@@ -9,7 +9,7 @@ router.get("/add-product", adminController.addProductPage);
 
 // @route   GET admin/products
 // @desc    get products for admin
-// router.get("/products", adminController.getProductsPage);
+router.get("/products", adminController.getProductsPage);
 
 // @route   POST admin/add-product
 // @desc    adding product
