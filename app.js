@@ -6,6 +6,7 @@ const app = express();
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
+const User = require("./models/User");
 
 const errorsController = require("./controllers/errors");
 
@@ -16,15 +17,14 @@ app.set("views", "views");
 
 app.use(bodyParser.urlencoded({ extended: false, useNewUrlParser: true }));
 
-// app.use((req, res, next) => {
-// User.findByPk(1)
-//   .then(user => {
-//     req.user = user;
-//     next();
-//   })
-//   .catch(err => console.log(err));
-// next();
-// });
+app.use((req, res, next) => {
+  User.findUserById("5c27c04c345ef8215865f91e")
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
+});
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
