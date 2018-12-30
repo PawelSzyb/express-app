@@ -21,7 +21,7 @@ router.get("/products/:id", shopController.getSingleProduct);
 
 // @route   POST /cart
 // @desc    add product to the cart
-// router.post("/cart", shopController.postCartItem);
+router.post("/cart", shopController.postCartItem);
 
 // @route   POST /cart-delete-item"
 // @desc    delete product from the cart

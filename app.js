@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false, useNewUrlParser: true }));
 app.use((req, res, next) => {
   User.findUserById("5c27c04c345ef8215865f91e")
     .then(user => {
-      req.user = user;
+      req.user = new User(user.name, user.email, user.cart, user._id);
       next();
     })
     .catch(err => console.log(err));
