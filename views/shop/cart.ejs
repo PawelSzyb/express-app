@@ -1,17 +1,18 @@
 <%- include("../partials/header.ejs") %> <%- include("../partials/navbar.ejs")
 %>
 <main>
-  <% if(products.length > 0) {%> <% products.forEach((el) => { %>
+  <% if(products.length > 0) {%>
   <ul class="cart__item-list">
+    <% products.forEach((el) => { %>
     <li class="cart__item">
-      <p><%= el.title %> <span>- <%= el.cartItem.quantity%></span></p>
+      <p><%= el.title %> <span>- <%= el.quantity%></span></p>
       <form action="/cart-delete-item" method="POST">
-        <input type="hidden" name="product_id" value="<%= el.cartItem.id %>" />
+        <input type="hidden" name="product_id" value="<%= el._id %>" />
         <button class="btn danger" type="submit">Delete</button>
       </form>
     </li>
+    <% }) %>
   </ul>
-  <% }) %>
   <form action="/create-order" method="POST">
     <button class="btn" type="submit">Order Now!</button>
   </form>

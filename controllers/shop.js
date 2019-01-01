@@ -89,17 +89,12 @@ exports.postOrderList = (req, res) => {
 exports.getCartPage = (req, res) => {
   req.user
     .getCart()
-    .then(cart => {
-      return cart
-        .getProducts()
-        .then(products => {
-          res.render("shop/cart", {
-            path: "/cart",
-            pageTitle: "Your Cart",
-            products
-          });
-        })
-        .catch(err => console.log(err));
+    .then(products => {
+      res.render("shop/cart", {
+        path: "/cart",
+        pageTitle: "Your Cart",
+        products
+      });
     })
     .catch(err => console.log(err));
 };
@@ -108,7 +103,7 @@ exports.postCartItem = (req, res) => {
   const product_id = req.body.product_id;
   Product.findProductById(product_id)
     .then(product => req.user.addToCart(product))
-    .then(cart => console.log(cart))
+    .then(cart => res.redirect("/products"))
     .catch(err => console.log(err));
   //   let newQuantity = 1;
   //   let fetchedCart;

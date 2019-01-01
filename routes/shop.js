@@ -17,7 +17,7 @@ router.get("/products/:id", shopController.getSingleProduct);
 
 // @route   GET /cart
 // @desc    get the cart of products
-// router.get("/cart", shopController.getCartPage);
+router.get("/cart", shopController.getCartPage);
 
 // @route   POST /cart
 // @desc    add product to the cart
