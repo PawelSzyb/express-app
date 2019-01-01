@@ -67,6 +67,50 @@ class User {
         });
       });
   }
+  deleteCartProduct(product_id) {
+    const db = getDB();
+    const updatedCart = this.cart.items.filter(item => {
+      return item.product_id.toString() !== product_id.toString();
+    });
+    return db
+      .collection("users")
+      .updateOne(
+        { _id: new mongoDB.ObjectId(this._id) },
+        { $set: { cart: { items: updatedCart } } }
+      );
+  }
+
+  addOrder() {
+    const db = getDB();
+    return this.getCart()
+      .then(products => {
+        const order = {
+          items: products,
+          user: {
+            _id: new mongoDB.ObjectId(this._id),
+            name: this.name
+          }
+        };
+        return db.collection("orders").insertOne(order);
+      })
+      .then(result => {
+        this.cart = { items: [] };
+        return db
+          .collection("users")
+          .updateOne(
+            { _id: new mongoDB.ObjectId(this._id) },
+            { $set: { cart: { items: [] } } }
+          );
+      })
+      .catch(err => console.log(err));
+  }
+  getOrders() {
+    const db = getDB();
+    return db
+      .collection("orders")
+      .find({ "user._id": new mongoDB.ObjectId(this._id) })
+      .toArray();
+  }
 
   static findUserById(user_id) {
     const db = getDB();
