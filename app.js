@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const path = require("path");
 
 const app = express();
@@ -15,7 +14,7 @@ const mongoConnect = require("./utils/database").mongoConnect;
 app.set("view engine", "ejs");
 app.set("views", "views");
 
-app.use(bodyParser.urlencoded({ extended: false, useNewUrlParser: true }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   User.findUserById("5c27c04c345ef8215865f91e")

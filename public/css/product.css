@@ -1,7 +1,7 @@
 .main-header {
   width: 100%;
   height: 3.5rem;
-  background-color: #5901a1;
+  background-color: var(--primaryColor);
 }
 .main-header__nav {
   height: 100%;
@@ -38,4 +38,7 @@
 .product__price,
 .product__description {
   color: #333;
+}
+.order__list-details::first-letter {
+  color: var(--primaryColor);
 }

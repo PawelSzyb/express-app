@@ -52,20 +52,51 @@ class User {
     const productsIds = this.cart.items.map(i => {
       return i.product_id;
     });
-    return db
-      .collection("products")
-      .find({ _id: { $in: productsIds } })
-      .toArray()
-      .then(products => {
-        return products.map(product => {
-          return {
-            ...product,
-            quantity: this.cart.items.find(item => {
-              return item.product_id.toString() === product._id.toString();
-            }).quantity
-          };
-        });
-      });
+    return (
+      db
+        .collection("products")
+        .find({ _id: { $in: productsIds } })
+        .toArray()
+        .then(products => {
+          if (this.cart.items.length !== products.length) {
+            // console.log(products);
+            this.cart.items.filter(item => {
+              // console.log(item);
+              return products.find(
+                prod => prod._id.toString() === item.product_id.toString()
+              );
+            });
+          }
+        })
+        // let updatedProds = [];
+        // if (this.cart.items.length !== products.length) {
+        //   return db
+        //     .collection("users")
+        //     .findOneAndUpdate(
+        //       { _id: new mongoDB.ObjectId(this._id) },
+        //       { $set: { cart: { items: products } } },
+        //       { returnNewDocument: true }
+        //     )
+        //     .then(newProds => {
+        //       updatedProds = newProds.value.cart.items;
+        //       // console.log(updatedProds);
+        //       return updatedProds;
+        //     });
+        // } else {
+        //   updatedProds = products;
+        //   return updatedProds;
+        // }
+        .then(products => {
+          return products.map(product => {
+            return {
+              ...product,
+              quantity: this.cart.items.find(item => {
+                return item.product_id.toString() === product._id.toString();
+              }).quantity
+            };
+          });
+        })
+    );
   }
   deleteCartProduct(product_id) {
     const db = getDB();

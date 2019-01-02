@@ -1,6 +1,7 @@
 @import url("./forms.css");
 @import url("./product.css");
 @import url("./cart.css");
+@import url("./order.css");
 
 body {
   margin: 0;
@@ -8,10 +9,13 @@ body {
   box-sizing: border-box;
   font-family: sans-serif;
 }
+:root {
+  --primaryColor: #5901a1;
+}
 button,
 .card__actions a {
   border-radius: 3px;
-  border: 2px solid #5901a1;
+  border: 2px solid var(--primaryColor);
   background-color: #fff;
   color: #333;
   padding: 0.5rem 1rem;
@@ -27,7 +31,7 @@ button.active,
 .card__actions a.active,
 .card__actions a:active,
 .card__actions a:hover {
-  background-color: #5901a1;
+  background-color: var(--primaryColor);
   color: #fff;
   cursor: pointer;
 }
