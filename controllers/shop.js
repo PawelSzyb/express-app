@@ -2,7 +2,7 @@ const Product = require("../models/Product");
 // const Cart = require("../models/Cart");
 
 exports.getProductsPage = (req, res) => {
-  Product.fetchAll()
+  Product.find()
     .then(products => {
       res.render("shop/product-list", {
         products,
@@ -15,7 +15,7 @@ exports.getProductsPage = (req, res) => {
 
 exports.getSingleProduct = (req, res) => {
   const product_id = req.params.id;
-  Product.findProductById(product_id)
+  Product.findById(product_id)
     .then(product => {
       res.render("shop/product-details", {
         product: product,
@@ -27,7 +27,7 @@ exports.getSingleProduct = (req, res) => {
 };
 
 exports.getIndexPage = (req, res) => {
-  Product.fetchAll()
+  Product.find()
     .then(products => {
       res.render("shop/index", {
         products,
@@ -83,7 +83,7 @@ exports.getCartPage = (req, res) => {
 
 exports.postCartItem = (req, res) => {
   const product_id = req.body.product_id;
-  Product.findProductById(product_id)
+  Product.findById(product_id)
     .then(product => req.user.addToCart(product))
     .then(() => res.redirect("/products"))
     .catch(err => console.log(err));

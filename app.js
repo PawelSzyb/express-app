@@ -1,7 +1,10 @@
 const express = require("express");
 const path = require("path");
+const mongoose = require("mongoose");
 
 const app = express();
+
+const db = require("./config/database").mongoURI;
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
@@ -9,17 +12,15 @@ const User = require("./models/User");
 
 const errorsController = require("./controllers/errors");
 
-const mongoConnect = require("./utils/database").mongoConnect;
-
 app.set("view engine", "ejs");
 app.set("views", "views");
 
 app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
-  User.findUserById("5c27c04c345ef8215865f91e")
+  User.findById("5c312502c6906c1428e8d390")
     .then(user => {
-      req.user = new User(user.name, user.email, user.cart, user._id);
+      req.user = user;
       next();
     })
     .catch(err => console.log(err));
@@ -32,6 +33,22 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(errorsController.get404Page);
 
-mongoConnect(() => {
-  app.listen(3000);
-});
+mongoose
+  .connect(db)
+  .then(() => {
+    User.findOne().then(user => {
+      if (!user) {
+        const user = new User({
+          name: "Max",
+          email: "max@test.com",
+          cart: {
+            items: []
+          }
+        });
+        user.save();
+      }
+    });
+    app.listen(3000, () => console.log("Server started"));
+  })
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.log(err));
