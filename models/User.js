@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Product = require("./Product");
 
 const Schema = mongoose.Schema;
 
@@ -46,6 +47,43 @@ userSchema.methods.addToCart = function(product) {
   };
   return this.save();
 };
+
+userSchema.methods.deleteCartProduct = function(product_id) {
+  const updatedCart = this.cart.items.filter(item => {
+    return item.product_id.toString() !== product_id.toString();
+  });
+  this.cart.items = updatedCart;
+  return this.save();
+};
+
+// userSchema.methods.getCart = function() {
+//   const productsIds = this.cart.items.map(i => {
+//     return i.product_id;
+//   });
+//   return Product.find({ _id: { $in: productsIds } }).then(products => {
+//     if (this.cart.items.length !== products.length) {
+//       const updatedCartItems = this.cart.items.filter(item => {
+//         return products.find(
+//           prod => prod._id.toString() === item.product_id.toString()
+//         );
+//       });
+//       this.cart.items = updatedCartItems;
+//       this.save();
+//       // db.collection("users").updateOne(
+//       //   { _id: new mongoDB.ObjectId(this._id) },
+//       //   { $set: { cart: { items: updatedCartItems } } }
+//       // );
+//     }
+//     return products.map(product => {
+//       return {
+//         ...product,
+//         quantity: this.cart.items.find(item => {
+//           return item.product_id.toString() === product._id.toString();
+//         }).quantity
+//       };
+//     });
+//   });
+// };
 
 module.exports = mongoose.model("User", userSchema);
 

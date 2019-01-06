@@ -72,13 +72,16 @@ exports.postOrderList = (req, res) => {
 };
 
 exports.getCartPage = (req, res) => {
-  req.user.getCart().then(products => {
-    res.render("shop/cart", {
-      path: "/cart",
-      pageTitle: "Your Cart",
-      products
+  req.user
+    .populate("cart.items.product_id")
+    .execPopulate()
+    .then(user => {
+      res.render("shop/cart", {
+        path: "/cart",
+        pageTitle: "Your Cart",
+        products: user.cart.items
+      });
     });
-  });
 };
 
 exports.postCartItem = (req, res) => {
