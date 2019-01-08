@@ -2,6 +2,7 @@
 @import url("./product.css");
 @import url("./cart.css");
 @import url("./order.css");
+@import url("./auth.css");
 
 body {
   margin: 0;

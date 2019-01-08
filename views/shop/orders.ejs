@@ -10,9 +10,9 @@
       <li class="order__list-item">
         <h3># <%= order._id %></h3>
         <ul class="order__list-product">
-          <% order.items.forEach(product => { %>
+          <% order.items.forEach(item => { %>
           <li class="order__list-details">
-            <%= product.title %> - <%= product.quantity %>
+            <%= item.product.title %> - <%= item.quantity %>
           </li>
           <% }) %>
         </ul>

@@ -7,6 +7,7 @@
   height: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 .main-header__list-item {
   margin: 0;
@@ -28,7 +29,7 @@
 .main-header__item.active a,
 .main-header__item:active a {
   background-color: #fff;
-  color: #5901a1;
+  color: var(--primaryColor);
 }
 .product__title,
 .product__price,
