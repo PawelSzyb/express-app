@@ -19,15 +19,32 @@
   margin: 0 0.5rem;
   padding: 0;
 }
-.main-header__item a {
+.main-header__item a,
+.main-header__item form {
   color: #fff;
   text-decoration: none;
   padding: 0.5rem;
   transition: 0.3s linear;
+  display: flex;
+}
+.main-header__item form {
+  background-color: var(--primaryColor);
+  padding: 0;
+}
+.main-header__item form button {
+  border: none;
+  background-color: transparent;
+  font-size: 1em;
+  color: #fff;
+  transition: 0.3s linear;
+  padding: 0.5em;
+  text-transform: none;
 }
 .main-header__item:hover a,
 .main-header__item.active a,
-.main-header__item:active a {
+.main-header__item:active a,
+.main-header__item form button:active,
+.main-header__item form button:hover {
   background-color: #fff;
   color: var(--primaryColor);
 }

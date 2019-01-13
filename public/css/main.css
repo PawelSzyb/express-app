@@ -13,8 +13,9 @@ body {
 :root {
   --primaryColor: #5901a1;
 }
-button,
-.card__actions a {
+
+.card__actions a,
+.card__actions button {
   border-radius: 3px;
   border: 2px solid var(--primaryColor);
   background-color: #fff;
@@ -83,4 +84,16 @@ button.danger.active {
   text-align: center;
   display: flex;
   justify-content: center;
+}
+
+form button {
+  border: 2px solid var(--primaryColor);
+  background-color: #fff;
+  color: #333;
+  padding: 0.5rem 1rem;
+  text-transform: uppercase;
+  transition: 0.3s linear;
+  margin: 10px;
+  text-decoration: none;
+  font-size: 0.9rem;
 }

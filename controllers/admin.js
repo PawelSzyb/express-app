@@ -2,11 +2,16 @@ const Product = require("../models/Product");
 // const Cart = require("../models/Cart");
 
 exports.addProductPage = (req, res) => {
-  res.render("admin/edit-product", {
-    pageTitle: "Add-Product",
-    path: "/admin/add-product",
-    editing: false
-  });
+  if (req.session.isAuthenticated === true) {
+    res.render("admin/edit-product", {
+      pageTitle: "Add-Product",
+      path: "/admin/add-product",
+      editing: false,
+      isAuthenticated: req.session.isAuthenticated
+    });
+  } else {
+    res.redirect("/login");
+  }
 };
 
 // exports.addProductData = (req, res) => {
@@ -34,7 +39,8 @@ exports.getEditProductPage = (req, res) => {
         pageTitle: "Edit-Product",
         path: "/admin/edit-product",
         editing: editMode,
-        product
+        product,
+        isAuthenticated: req.session.isAuthenticated
       });
     })
     .catch(err => console.log(err));
@@ -83,11 +89,11 @@ exports.getProductsPage = (req, res) => {
     // .populate("user_id", "name")
     // .select("-price")
     .then(products => {
-      console.log(products);
       res.render("admin/products", {
         products,
         path: "/admin/products",
-        pageTitle: "Admin Products"
+        pageTitle: "Admin Products",
+        isAuthenticated: req.session.isAuthenticated
       });
     })
     .catch(err => console.log(err));
