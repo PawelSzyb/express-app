@@ -11,8 +11,16 @@ router.get("/login", authController.getLoginPage);
 // @desc    logging user
 router.post("/login", authController.postLogin);
 
-// @route   POST login
-// @desc    logging user
+// @route   POST logout
+// @desc    logging out user
 router.post("/logout", authController.postLogout);
+
+// @route   GET signup
+// @desc    get registration page
+router.get("/signup", authController.getSignup);
+
+// @route   POST signup
+// @desc    post signup data
+router.post("/signup", authController.postSignup);
 
 module.exports = router;

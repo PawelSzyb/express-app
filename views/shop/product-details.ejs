@@ -14,8 +14,8 @@
           <p class="product__description"><%= product.description %></p>
         </div>
         <div class="card__actions">
-          <a href="/products" class="btn">Back</a> <%-
-          include("../partials/add-to-cart.ejs", {product}) %>
+          <a href="/products" class="btn">Back</a> <% if(isAuthenticated) { %>
+          <%- include("../partials/add-to-cart.ejs", {product}) %> <% } %>
         </div>
       </header>
     </article>

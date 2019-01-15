@@ -1,0 +1,23 @@
+<%- include("../partials/header.ejs") %> <%- include("../partials/navbar.ejs")
+%>
+<main>
+  <form class="signup-form" action="/signup" method="POST">
+    <div class="form-control">
+      <label for="name">Name</label> <input type="text" name="name" id="name" />
+    </div>
+    <div class="form-control">
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" />
+    </div>
+    <div class="form-control">
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" />
+    </div>
+    <div class="form-control">
+      <label for="password2">Comfirm Password</label>
+      <input type="password" name="password2" id="password2" />
+    </div>
+    <button type="submit">SignUp</button>
+  </form>
+</main>
+<%- include("../partials/footer.ejs") %>

@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const bcrypt = require("bcryptjs");
 
 exports.getLoginPage = (req, res) => {
   res.render("auth/login", {
@@ -10,17 +11,29 @@ exports.getLoginPage = (req, res) => {
 
 exports.postLogin = (req, res) => {
   const { email, password } = req.body;
-  User.findById("5c312502c6906c1428e8d390")
-    .then(user => {
-      if (user) {
-        req.session.user = user;
-        req.session.isAuthenticated = true;
-        res.redirect("/");
-      } else {
-        res.redirect("/user/login");
-      }
-    })
-    .catch(err => console.log(err));
+  User.findOne({ email }).then(user => {
+    if (!user) res.redirect("/login");
+    else {
+      bcrypt
+        .compare(password, user.password)
+        .then(doMatch => {
+          if (doMatch) {
+            req.session.user = user;
+            req.session.isAuthenticated = true;
+            req.session.save(err => {
+              console.log(err);
+              res.redirect("/");
+            });
+          } else {
+            res.redirect("/login");
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          res.redirect("/login");
+        });
+    }
+  });
 };
 
 exports.postLogout = (req, res) => {
@@ -28,4 +41,38 @@ exports.postLogout = (req, res) => {
     console.log(err);
     res.redirect("/");
   });
+};
+
+exports.getSignup = (req, res) => {
+  res.render("auth/signup", {
+    path: "/signup",
+    pageTitle: "Singup",
+    isAuthenticated: req.session.isAuthenticated
+  });
+};
+
+exports.postSignup = (req, res) => {
+  const { name, email, password, passwrod2 } = req.body;
+
+  User.findOne({ email })
+    .then(user => {
+      if (user) {
+        res.redirect("/signup");
+      } else {
+        bcrypt.genSalt(12, (err, salt) => {
+          bcrypt.hash(password, salt, (err, hash) => {
+            const newUser = new User({
+              name,
+              email,
+              password: hash,
+              cart: { items: [] }
+            });
+
+            newUser.save();
+            res.redirect("/login");
+          });
+        });
+      }
+    })
+    .catch(err => console.log(err));
 };
