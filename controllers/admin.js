@@ -1,17 +1,12 @@
 const Product = require("../models/Product");
-// const Cart = require("../models/Cart");
 
 exports.addProductPage = (req, res) => {
-  if (req.session.isAuthenticated === true) {
-    res.render("admin/edit-product", {
-      pageTitle: "Add-Product",
-      path: "/admin/add-product",
-      editing: false,
-      isAuthenticated: req.session.isAuthenticated
-    });
-  } else {
-    res.redirect("/login");
-  }
+  res.render("admin/edit-product", {
+    pageTitle: "Add-Product",
+    path: "/admin/add-product",
+    editing: false,
+    isAuthenticated: req.session.isAuthenticated
+  });
 };
 
 // exports.addProductData = (req, res) => {
