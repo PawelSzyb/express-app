@@ -2,22 +2,28 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 
 exports.getLoginPage = (req, res) => {
+  let message = req.flash("error");
+  if (message.length === 0) {
+    message = null;
+  }
   res.render("auth/login", {
     path: "/login",
     pageTitle: "Login",
-    isAuthenticated: req.session.isAuthenticated
+    messages: message
   });
 };
 
 exports.postLogin = (req, res) => {
   const { email, password } = req.body;
   User.findOne({ email }).then(user => {
-    if (!user) res.redirect("/login");
-    else {
+    if (!user) {
+      req.flash("error", "Invalid email or password.");
+      res.redirect("/login");
+    } else {
       bcrypt
         .compare(password, user.password)
-        .then(doMatch => {
-          if (doMatch) {
+        .then(isMatch => {
+          if (isMatch) {
             req.session.user = user;
             req.session.isAuthenticated = true;
             req.session.save(err => {
@@ -25,6 +31,7 @@ exports.postLogin = (req, res) => {
               res.redirect("/");
             });
           } else {
+            req.flash("error", "Invalid email or password.");
             res.redirect("/login");
           }
         })
@@ -44,10 +51,14 @@ exports.postLogout = (req, res) => {
 };
 
 exports.getSignup = (req, res) => {
+  let message = req.flash("error");
+  if (message.length === 0) {
+    message = null;
+  }
   res.render("auth/signup", {
     path: "/signup",
     pageTitle: "Singup",
-    isAuthenticated: req.session.isAuthenticated
+    messages: message
   });
 };
 
@@ -57,6 +68,7 @@ exports.postSignup = (req, res) => {
   User.findOne({ email })
     .then(user => {
       if (user) {
+        req.flash("error", "User with this email already exists.");
         res.redirect("/signup");
       } else {
         bcrypt.genSalt(12, (err, salt) => {

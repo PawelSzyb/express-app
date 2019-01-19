@@ -97,3 +97,24 @@ form button {
   text-decoration: none;
   font-size: 0.9rem;
 }
+
+.user__message {
+  width: 90%;
+  margin: 1rem auto;
+  background-color: skyblue;
+  border: 1px solid #2d6e99;
+  color: #000;
+  padding: 1rem;
+  text-align: center;
+  border-radius: 5px;
+}
+.user__message-error {
+  border: 1px solid red;
+  background: rgb(250, 152, 152);
+}
+
+@media (min-width: 600px) {
+  .user__message {
+    width: 50%;
+  }
+}

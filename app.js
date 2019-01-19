@@ -1,6 +1,8 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
+const csrf = require("csurf");
+const flash = require("connect-flash");
 
 const db = require("./config/database").mongoURI;
 
@@ -11,6 +13,8 @@ const store = new MongoDBStore({
   uri: db,
   collection: "sessions"
 });
+
+const csrfProtection = csrf();
 
 const app = express();
 
@@ -35,6 +39,10 @@ app.use(
 );
 app.use(express.urlencoded({ extended: true }));
 
+app.use(csrfProtection);
+
+app.use(flash());
+
 app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
@@ -45,6 +53,12 @@ app.use((req, res, next) => {
       next();
     })
     .catch(err => console.log(err));
+});
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isAuthenticated;
+  res.locals.csrfToken = req.csrfToken();
+  next();
 });
 
 app.use("/admin", adminRoutes);

@@ -1,6 +1,9 @@
 <%- include("../partials/header.ejs") %> <%- include("../partials/navbar.ejs")
 %>
 <main>
+  <% if(messages) { %>
+  <p class="user__message user__message-error"><%= messages %></p>
+  <% } %>
   <form class="signup-form" action="/signup" method="POST">
     <div class="form-control">
       <label for="name">Name</label> <input type="text" name="name" id="name" />
@@ -17,6 +20,7 @@
       <label for="password2">Comfirm Password</label>
       <input type="password" name="password2" id="password2" />
     </div>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
     <button type="submit">SignUp</button>
   </form>
 </main>
