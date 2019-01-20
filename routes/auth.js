@@ -23,4 +23,16 @@ router.get("/signup", authController.getSignup);
 // @desc    post signup data
 router.post("/signup", authController.postSignup);
 
+// @route   GET reset password
+// @desc    display reset password form
+router.get("/reset", authController.getReset);
+
+// @route   POST reset password
+// @desc    send email with link to reset password
+router.post("/reset", authController.postReset);
+
+// @route   POST reset password
+// @desc    send email with link to reset password
+router.get("/reset/:token", authController.getNewPassword);
+
 module.exports = router;

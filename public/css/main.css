@@ -32,7 +32,8 @@ button:active,
 button.active,
 .card__actions a.active,
 .card__actions a:active,
-.card__actions a:hover {
+.card__actions a:hover,
+.reset__link:hover {
   background-color: var(--primaryColor);
   color: #fff;
   cursor: pointer;

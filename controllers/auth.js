@@ -2,6 +2,7 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const sgTransport = require("nodemailer-sendgrid-transport");
+const crypto = require("crypto");
 
 const transporter = nodemailer.createTransport(
   sgTransport({
@@ -107,4 +108,69 @@ exports.postSignup = (req, res) => {
       }
     })
     .catch(err => console.log(err));
+};
+
+exports.getReset = (req, res) => {
+  let message = req.flash("error");
+  if (message.length === 0) {
+    message = null;
+  }
+  res.render("auth/reset", {
+    path: "/reset",
+    pageTitle: "Reset Password",
+    messages: message
+  });
+};
+
+exports.postReset = (req, res) => {
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err);
+      return res.redirect("/reset");
+    }
+    const token = buffer.toString("hex");
+    User.findOne({ email: req.body.email })
+      .then(user => {
+        if (!user) {
+          req.flash("error", "Email is invalid");
+          return res.redirect("/reset");
+        }
+        user.resetToken = token;
+        user.resetTokenExpiration = Date.now() + 3600000;
+        return user.save();
+      })
+      .then(() => {
+        res.redirect("/");
+        const emailToSend = {
+          to: req.body.email,
+          from: "shop-node@complete.com",
+          subject: "Password reset",
+          html: `
+            <p>You have requested to change password</p>
+            <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to reset the password</p>
+          `
+        };
+        transporter.sendMail(emailToSend);
+      })
+      .catch(err => console.log(err));
+  });
+};
+
+exports.getNewPassword = (req, res) => {
+  const token = req.params.token;
+  User.findOne({
+    resetToken: token,
+    resetTokenExpiration: { $gt: Date.now() }
+  }).then(user => {
+    let message = req.flash("error");
+    if (message.length === 0) {
+      message = null;
+    }
+    res.render("auth/new-password", {
+      path: "/new-password",
+      pageTitle: "New Password",
+      messages: message,
+      user_id: user._id.toString()
+    });
+  });
 };

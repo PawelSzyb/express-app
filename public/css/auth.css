@@ -6,7 +6,8 @@
   margin: auto;
 }
 .login-form button,
-.signup-form button {
+.signup-form button,
+.reset__link {
   border: 2px solid var(--primaryColor);
   border-radius: 2px;
   background-color: transparent;
@@ -14,4 +15,9 @@
   color: #333;
   transition: 0.3s linear;
   padding: 0.5em;
+}
+
+.reset__link {
+  text-decoration: none;
+  text-transform: uppercase;
 }
