@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { check } = require("express-validator/check");
 
 const authController = require("../controllers/auth");
 
@@ -21,7 +22,19 @@ router.get("/signup", authController.getSignup);
 
 // @route   POST signup
 // @desc    post signup data
-router.post("/signup", authController.postSignup);
+router.post(
+  "/signup",
+  check("email")
+    .isEmail()
+    .withMessage("Please enter a valid email")
+    .custom((value, { req }) => {
+      if (value === "test@test.com") {
+        throw new Error("This email is invalid too :)");
+      }
+      return true;
+    }),
+  authController.postSignup
+);
 
 // @route   GET reset password
 // @desc    display reset password form
