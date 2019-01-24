@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport(
   sgTransport({
     auth: {
       api_key:
-        "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"
+        "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"
     }
   })
 );
@@ -39,7 +39,7 @@ exports.postLogin = (req, res) => {
             req.session.user = user;
             req.session.isAuthenticated = true;
             req.session.save(err => {
-              console.log(err);
+              if (err) console.log(err);
               res.redirect("/");
             });
           } else {
@@ -139,7 +139,7 @@ exports.postReset = (req, res) => {
         user.resetTokenExpiration = Date.now() + 3600000;
         return user.save();
       })
-      .then(() => {
+      .then(user => {
         res.redirect("/");
         const emailToSend = {
           to: req.body.email,
@@ -150,7 +150,9 @@ exports.postReset = (req, res) => {
             <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to reset the password</p>
           `
         };
-        transporter.sendMail(emailToSend);
+        transporter.sendMail(emailToSend, function(err, res) {
+          if (err) console.log(err);
+        });
       })
       .catch(err => console.log(err));
   });
@@ -170,7 +172,30 @@ exports.getNewPassword = (req, res) => {
       path: "/new-password",
       pageTitle: "New Password",
       messages: message,
-      user_id: user._id.toString()
+      user_id: user._id.toString(),
+      passwordToken: token
     });
   });
+};
+
+exports.postNewPassword = (req, res) => {
+  const { passwordToken, user_id, password } = req.body;
+  let resetUser;
+  User.findOne({
+    resetToken: passwordToken,
+    resetTokenExpiration: { $gt: Date.now() },
+    _id: user_id
+  })
+    .then(user => {
+      resetUser = user;
+      return bcrypt.hash(password, 12);
+    })
+    .then(hashPass => {
+      resetUser.resetToken = undefined;
+      resetUser.resetTokenExpiration = undefined;
+      resetUser.password = hashPass;
+      return resetUser.save();
+    })
+    .then(() => res.redirect("/login"))
+    .catch(err => console.log(err));
 };

@@ -31,8 +31,12 @@ router.get("/reset", authController.getReset);
 // @desc    send email with link to reset password
 router.post("/reset", authController.postReset);
 
-// @route   POST reset password
-// @desc    send email with link to reset password
+// @route   GET reset password
+// @desc    display form to change password
 router.get("/reset/:token", authController.getNewPassword);
+
+// @route   POST new password
+// @desc    change password for new one
+router.post("/new-password", authController.postNewPassword);
 
 module.exports = router;
