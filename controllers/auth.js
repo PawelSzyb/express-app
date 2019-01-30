@@ -15,45 +15,66 @@ const transporter = nodemailer.createTransport(
 );
 
 exports.getLoginPage = (req, res) => {
-  let message = req.flash("error");
-  if (message.length === 0) {
-    message = null;
+  let flashMessage = req.flash("error");
+  if (flashMessage.length === 0) {
+    flashMessage = null;
   }
   res.render("auth/login", {
     path: "/login",
     pageTitle: "Login",
-    messages: message
+    messages: [],
+    flashMessage
   });
 };
 
 exports.postLogin = (req, res) => {
+  let flashMessage = req.flash("error");
+  if (flashMessage.length === 0) {
+    flashMessage = null;
+  }
   const { email, password } = req.body;
-  User.findOne({ email }).then(user => {
-    if (!user) {
-      req.flash("error", "Invalid email or password.");
-      res.redirect("/login");
-    } else {
-      bcrypt
-        .compare(password, user.password)
-        .then(isMatch => {
-          if (isMatch) {
-            req.session.user = user;
-            req.session.isAuthenticated = true;
-            req.session.save(err => {
-              if (err) console.log(err);
-              res.redirect("/");
-            });
-          } else {
-            req.flash("error", "Invalid email or password.");
-            res.redirect("/login");
-          }
-        })
-        .catch(err => {
-          console.log(err);
-          res.redirect("/login");
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).render("auth/login", {
+      path: "/login",
+      pageTitle: "Login",
+      messages: errors.array(),
+      flashMessage: null
+    });
+  }
+
+  User.findOne({ email })
+    .then(user => {
+      if (!user) {
+        req.flash("error", "User not found");
+        return res.redirect("auth/login", {
+          path: "/login",
+          pageTitle: "Login",
+          messages: errors.array()
         });
-    }
-  });
+      }
+      bcrypt.compare(password, user.password).then(isMatch => {
+        if (isMatch) {
+          req.session.user = user;
+          req.session.isAuthenticated = true;
+          req.session.save(err => {
+            if (err) console.log(err);
+            res.redirect("/");
+          });
+        } else {
+          res.status(422).render("auth/login", {
+            path: "/login",
+            pageTitle: "Login",
+            messages: [{ msg: "Password Invalid" }],
+            flashMessage: null
+          });
+        }
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.redirect("/login");
+    });
 };
 
 exports.postLogout = (req, res) => {
@@ -71,53 +92,57 @@ exports.getSignup = (req, res) => {
   res.render("auth/signup", {
     path: "/signup",
     pageTitle: "Singup",
-    messages: message
+    messages: message,
+    inputs: {
+      name: "",
+      email: "",
+      password: "",
+      password2: ""
+    }
   });
 };
 
 exports.postSignup = (req, res) => {
-  const { name, email, password, passwrod2 } = req.body;
+  const { name, email, password, password2 } = req.body;
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     return res.status(422).render("auth/signup", {
       path: "/signup",
       pageTitle: "Singup",
-      messages: errors.array()[0].msg
+      messages: errors.array(),
+      inputs: {
+        name,
+        email,
+        password,
+        password2
+      },
+      validationErrors: errors.array()
     });
   }
 
-  User.findOne({ email })
-    .then(user => {
-      if (user) {
-        req.flash("error", "User with this email already exists.");
-        res.redirect("/signup");
-      } else {
-        bcrypt.genSalt(12, (err, salt) => {
-          bcrypt.hash(password, salt, (err, hash) => {
-            const newUser = new User({
-              name,
-              email,
-              password: hash,
-              cart: { items: [] }
-            });
+  bcrypt.genSalt(12, (err, salt) => {
+    bcrypt.hash(password, salt, (err, hash) => {
+      const newUser = new User({
+        name,
+        email,
+        password: hash,
+        cart: { items: [] }
+      });
 
-            newUser.save();
-            res.redirect("/login");
-            const emailToSend = {
-              to: email,
-              from: "shop-node@complete.com",
-              subject: "Signup succeeded",
-              html: "<h1>You have successfully singed up mate</h1>"
-            };
-            transporter.sendMail(emailToSend, function(err, res) {
-              if (err) console.log(err);
-            });
-          });
-        });
-      }
-    })
-    .catch(err => console.log(err));
+      newUser.save();
+      res.redirect("/login");
+      const emailToSend = {
+        to: email,
+        from: "shop-node@complete.com",
+        subject: "Signup succeeded",
+        html: "<h1>You have successfully singed up mate</h1>"
+      };
+      transporter.sendMail(emailToSend, function(err, res) {
+        if (err) console.log(err);
+      });
+    });
+  });
 };
 
 exports.getReset = (req, res) => {

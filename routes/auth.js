@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { check } = require("express-validator/check");
+const { check, body } = require("express-validator/check");
+const User = require("../models/User");
 
 const authController = require("../controllers/auth");
 
@@ -10,7 +11,16 @@ router.get("/login", authController.getLoginPage);
 
 // @route   POST login
 // @desc    logging user
-router.post("/login", authController.postLogin);
+router.post(
+  "/login",
+  [
+    body("email", "Invalid email or password").isEmail(),
+    body("password", "Password must be at least 6 characters long").isLength({
+      min: 6
+    })
+  ],
+  authController.postLogin
+);
 
 // @route   POST logout
 // @desc    logging out user
@@ -24,15 +34,31 @@ router.get("/signup", authController.getSignup);
 // @desc    post signup data
 router.post(
   "/signup",
-  check("email")
-    .isEmail()
-    .withMessage("Please enter a valid email")
-    .custom((value, { req }) => {
-      if (value === "test@test.com") {
-        throw new Error("This email is invalid too :)");
+  [
+    check("email")
+      .isEmail()
+      .withMessage("Please enter a valid email")
+      .custom((value, { req }) => {
+        // if (value === "test@test.com") {
+        //   throw new Error("This email is invalid too :)");
+        // }
+        // return true;
+        return User.findOne({ email: value }).then(user => {
+          if (user) {
+            return Promise.reject("Email already exists.");
+          }
+        });
+      }),
+    body("password", "Password must be atleast 6 characters long").isLength({
+      min: 6
+    }),
+    body("password2").custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error("Passwords do not match");
       }
       return true;
-    }),
+    })
+  ],
   authController.postSignup
 );
 

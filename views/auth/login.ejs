@@ -1,9 +1,11 @@
 <%- include("../partials/header.ejs") %> <%- include("../partials/navbar.ejs")
 %>
 <main>
-  <% if(messages) { %>
-  <p class="user__message user__message-error"><%= messages %></p>
-  <% } %>
+  <% if(messages.length > 0) { %> <% messages.forEach(message => { %>
+  <p class="user__message user__message-error"><%= message.msg %></p>
+  <% }) %> <% } %> <% if(flashMessage) {%>
+  <p class="user__message user__message-error"><%= flashMessage%></p>
+  <%} %>
   <form class="login-form" action="/login" method="POST">
     <div class="form-control">
       <label for="email">Email</label>
