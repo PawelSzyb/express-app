@@ -14,10 +14,10 @@ router.get("/login", authController.getLoginPage);
 router.post(
   "/login",
   [
-    body("email", "Invalid email or password").isEmail(),
-    body("password", "Password must be at least 6 characters long").isLength({
-      min: 6
-    })
+    body("email", "Invalid email")
+      .isEmail()
+      .normalizeEmail(),
+    body("password").trim()
   ],
   authController.postLogin
 );
@@ -48,16 +48,21 @@ router.post(
             return Promise.reject("Email already exists.");
           }
         });
-      }),
-    body("password", "Password must be atleast 6 characters long").isLength({
-      min: 6
-    }),
-    body("password2").custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error("Passwords do not match");
-      }
-      return true;
-    })
+      })
+      .normalizeEmail(),
+    body("password", "Password must be atleast 6 characters long")
+      .isLength({
+        min: 6
+      })
+      .trim(),
+    body("password2")
+      .trim()
+      .custom((value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error("Passwords do not match");
+        }
+        return true;
+      })
   ],
   authController.postSignup
 );

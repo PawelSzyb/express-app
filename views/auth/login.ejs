@@ -3,17 +3,27 @@
 <main>
   <% if(messages.length > 0) { %> <% messages.forEach(message => { %>
   <p class="user__message user__message-error"><%= message.msg %></p>
-  <% }) %> <% } %> <% if(flashMessage) {%>
-  <p class="user__message user__message-error"><%= flashMessage%></p>
-  <%} %>
-  <form class="login-form" action="/login" method="POST">
+  <% }) %> <% } %>
+  <form class="login-form" action="/login" method="POST" novalidate>
     <div class="form-control">
       <label for="email">Email</label>
-      <input type="email" name="email" id="email" />
+      <input
+        type="email"
+        name="email"
+        id="email"
+        value="<%= inputs.email %>"
+        class="<%= validationErrors.find(error => error.param === 'email') ? 'is-invalid': '' %>"
+      />
     </div>
     <div class="form-control">
       <label for="password">Password</label>
-      <input type="password" name="password" id="password" />
+      <input
+        type="password"
+        name="password"
+        id="password"
+        value="<%= inputs.password %>"
+        class="<%= validationErrors.find(error => error.param === 'password') ? 'is-invalid': '' %>"
+      />
     </div>
     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
     <button type="submit">Login</button>

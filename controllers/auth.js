@@ -23,7 +23,12 @@ exports.getLoginPage = (req, res) => {
     path: "/login",
     pageTitle: "Login",
     messages: [],
-    flashMessage
+    flashMessage,
+    inputs: {
+      email: "",
+      password: ""
+    },
+    validationErrors: []
   });
 };
 
@@ -39,18 +44,26 @@ exports.postLogin = (req, res) => {
       path: "/login",
       pageTitle: "Login",
       messages: errors.array(),
-      flashMessage: null
+      inputs: {
+        email,
+        password
+      },
+      validationErrors: errors.array()
     });
   }
 
   User.findOne({ email })
     .then(user => {
       if (!user) {
-        req.flash("error", "User not found");
-        return res.redirect("auth/login", {
+        return res.render("auth/login", {
           path: "/login",
           pageTitle: "Login",
-          messages: errors.array()
+          messages: [{ msg: "User not found" }],
+          inputs: {
+            email,
+            password
+          },
+          validationErrors: [{ param: "email" }]
         });
       }
       bcrypt.compare(password, user.password).then(isMatch => {
@@ -66,7 +79,11 @@ exports.postLogin = (req, res) => {
             path: "/login",
             pageTitle: "Login",
             messages: [{ msg: "Password Invalid" }],
-            flashMessage: null
+            inputs: {
+              email,
+              password
+            },
+            validationErrors: [{ param: "password" }]
           });
         }
       });
@@ -85,20 +102,21 @@ exports.postLogout = (req, res) => {
 };
 
 exports.getSignup = (req, res) => {
-  let message = req.flash("error");
-  if (message.length === 0) {
-    message = null;
-  }
+  // let message = req.flash("error");
+  // if (message.length === 0) {
+  //   message = [];
+  // }
   res.render("auth/signup", {
     path: "/signup",
     pageTitle: "Singup",
-    messages: message,
+    messages: [],
     inputs: {
       name: "",
       email: "",
       password: "",
       password2: ""
-    }
+    },
+    validationErrors: []
   });
 };
 
