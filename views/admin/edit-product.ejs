@@ -1,6 +1,9 @@
 <%- include("../partials/header.ejs") %> <%- include("../partials/navbar.ejs")
 %>
 <main>
+  <% if(messages.length > 0) { %> <% messages.forEach(message => { %>
+  <p class="user__message user__message-error"><%= message.msg %></p>
+  <% }) %> <% } %>
   <form
     class="product-form"
     action="<%= editing? '/admin/edit-product' : '/admin/add-product' %>"
@@ -12,7 +15,8 @@
         type="text"
         name="title"
         id="title"
-        value="<% if(editing) { %><%= product.title %><% } %>"
+        value="<% if(editing || hasErrors) { %><%= product.title %><% } %>"
+        class="<%= validationErrors.find(error => error.param === 'title') ? 'is-invalid': '' %>"
       />
     </div>
     <div class="form-control">
@@ -21,7 +25,8 @@
         type="text"
         name="imageUrl"
         id="imageUrl"
-        value="<% if(editing) { %><%=product.imageUrl%><% } %>"
+        value="<% if(editing || hasErrors) { %><%=product.imageUrl%><% } %>"
+        class="<%= validationErrors.find(error => error.param === 'imageUrl') ? 'is-invalid': '' %>"
       />
     </div>
     <div class="form-control">
@@ -32,13 +37,14 @@
         id="price"
         step="0.01"
         min="0"
-        value="<% if(editing) { %><%=product.price%><% } %>"
+        value="<% if(editing || hasErrors) { %><%=product.price%><% } %>"
+        class="<%= validationErrors.find(error => error.param === 'price') ? 'is-invalid': '' %>"
       />
     </div>
     <div class="form-control">
       <label for="description">Description</label>
       <textarea name="description" id="description" rows="5">
-<% if(editing) { %><%=product.description%><% } %></textarea
+<% if(editing || hasErrors) { %><%=product.description%><% } %></textarea
       >
     </div>
     <% if(editing) { %>

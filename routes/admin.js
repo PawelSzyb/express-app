@@ -1,6 +1,8 @@
 const adminController = require("../controllers/admin");
 const isAuthenticated = require("../middleware/is-authenticated");
 
+const { body } = require("express-validator/check");
+
 const express = require("express");
 const router = express.Router();
 
@@ -16,8 +18,22 @@ router.get("/products", isAuthenticated, adminController.getProductsPage);
 // @desc    adding product
 router.post(
   "/add-product",
+  [
+    body("title")
+      .trim()
+      .not()
+      .isEmpty()
+      .withMessage("Title is required"),
+    body("imageUrl")
+      .isURL()
+      .withMessage("Image url is not valid"),
+    body("price")
+      .isFloat()
+      .withMessage("Price is invalid"),
+    body("description").trim()
+  ],
   isAuthenticated,
-  adminController.postEditProductData
+  adminController.addProductData
 );
 
 // @route   GET admin/products
@@ -32,6 +48,20 @@ router.get(
 // @desc    update product with data from form
 router.post(
   "/edit-product",
+  [
+    body("title")
+      .trim()
+      .not()
+      .isEmpty()
+      .withMessage("Title is required"),
+    body("imageUrl")
+      .isURL()
+      .withMessage("Image url is not valid"),
+    body("price")
+      .isFloat()
+      .withMessage("Price is invalid"),
+    body("description").trim()
+  ],
   isAuthenticated,
   adminController.postEditProductData
 );

@@ -1,21 +1,52 @@
 const Product = require("../models/Product");
+const { validationResult } = require("express-validator/check");
 
 exports.addProductPage = (req, res) => {
   res.render("admin/edit-product", {
     pageTitle: "Add-Product",
     path: "/admin/add-product",
-    editing: false
+    editing: false,
+    hasErrors: false,
+    messages: [],
+    validationErrors: []
   });
 };
 
-// exports.addProductData = (req, res) => {
-//   const { title, price, description, imageUrl } = req.body;
-//   const product = new Product({ title, price, description, imageUrl });
-//   product
-//     .save()
-//     .then(result => res.redirect("/admin/products"))
-//     .catch(err => console.log(err));
-// };
+exports.addProductData = (req, res) => {
+  const { title, price, description, imageUrl } = req.body;
+  const user_id = req.user._id;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    res.status(422).render("admin/edit-product", {
+      pageTitle: "Add-Product",
+      path: "/admin/add-product",
+      editing: false,
+      hasErrors: true,
+      messages: errors.array(),
+      product: {
+        title,
+        imageUrl,
+        price,
+        description
+      },
+      validationErrors: errors.array()
+    });
+  } else {
+    const product = new Product({
+      title,
+      price,
+      description,
+      imageUrl,
+      user_id
+    });
+    product
+      .save()
+      .then(result => res.redirect("/admin/products"))
+      .catch(err => console.log(err));
+  }
+};
 
 exports.getEditProductPage = (req, res) => {
   const editMode = req.query.edit;
@@ -33,7 +64,10 @@ exports.getEditProductPage = (req, res) => {
         pageTitle: "Edit-Product",
         path: "/admin/edit-product",
         editing: editMode,
-        product
+        messages: [],
+        product,
+        hasErrors: false,
+        validationErrors: []
       });
     })
     .catch(err => console.log(err));
@@ -42,6 +76,24 @@ exports.getEditProductPage = (req, res) => {
 exports.postEditProductData = (req, res) => {
   const { product_id, title, imageUrl, description, price } = req.body;
   const user_id = req.user._id;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    res.render("admin/edit-product", {
+      pageTitle: "Edit-Product",
+      path: "/admin/edit-product",
+      editing: true,
+      hasErrors: false,
+      messages: errors.array(),
+      product: {
+        title,
+        imageUrl,
+        description,
+        price
+      },
+      validationErrors: errors.array()
+    });
+  }
 
   Product.findById(product_id)
     .then(product => {
