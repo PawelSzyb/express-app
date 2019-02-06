@@ -44,7 +44,7 @@ exports.addProductData = (req, res) => {
     product
       .save()
       .then(result => res.redirect("/admin/products"))
-      .catch(err => console.log(err));
+      .catch(err => res.redirect("/500"));
   }
 };
 
