@@ -76,6 +76,10 @@ app.use("/500", errorsController.get500Page);
 
 app.use(errorsController.get404Page);
 
+app.use((error, req, res, next) => {
+  res.redirect("/500");
+});
+
 mongoose
   .connect(db)
   .then(() => {
