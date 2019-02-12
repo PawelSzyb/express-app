@@ -157,7 +157,11 @@ exports.postSignup = (req, res) => {
         html: "<h1>You have successfully singed up mate</h1>"
       };
       transporter.sendMail(emailToSend, function(err, res) {
-        if (err) console.log(err);
+        if (err) {
+          const error = new Error(err);
+          error.httpStatusCode = 500;
+          return next(error);
+        }
       });
     });
   });
@@ -204,10 +208,19 @@ exports.postReset = (req, res) => {
           `
         };
         transporter.sendMail(emailToSend, function(err, res) {
-          if (err) console.log(err);
+          if (err) {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+          }
         });
       })
-      .catch(err => console.log(err));
+
+      .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+      });
   });
 };
 
@@ -250,5 +263,9 @@ exports.postNewPassword = (req, res) => {
       return resetUser.save();
     })
     .then(() => res.redirect("/login"))
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };

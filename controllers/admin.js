@@ -47,7 +47,7 @@ exports.addProductData = (req, res, next) => {
       .catch(err => {
         const error = new Error(err);
         error.httpStatusCode = 500;
-        next(error);
+        return next(error);
       });
   }
 };
@@ -77,7 +77,7 @@ exports.getEditProductPage = (req, res, next) => {
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      next(error);
+      return next(error);
     });
 };
 
@@ -131,7 +131,7 @@ exports.postEditProductData = (req, res) => {
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      next(error);
+      return next(error);
     });
 };
 
@@ -142,7 +142,11 @@ exports.deleteProduct = (req, res) => {
     .then(product => {
       res.redirect("/admin/products");
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getProductsPage = (req, res) => {
@@ -156,5 +160,9 @@ exports.getProductsPage = (req, res) => {
         pageTitle: "Admin Products"
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };

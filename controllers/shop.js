@@ -11,7 +11,11 @@ exports.getProductsPage = (req, res) => {
         pageTitle: "All Products"
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getSingleProduct = (req, res) => {
@@ -24,7 +28,11 @@ exports.getSingleProduct = (req, res) => {
         path: "/products"
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getIndexPage = (req, res) => {
@@ -36,7 +44,11 @@ exports.getIndexPage = (req, res) => {
         pageTitle: "Shop"
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getCheckoutPage = (req, res) => {
@@ -55,7 +67,11 @@ exports.getOrdersPage = (req, res) => {
         orders
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postOrderList = (req, res) => {
@@ -79,7 +95,11 @@ exports.postOrderList = (req, res) => {
       req.user.clearCart();
       res.redirect("/orders");
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getCartPage = (req, res) => {
@@ -100,7 +120,11 @@ exports.postCartItem = (req, res) => {
   Product.findById(product_id)
     .then(product => req.user.addToCart(product))
     .then(() => res.redirect("/products"))
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.deleteCartProduct = (req, res) => {
@@ -108,5 +132,9 @@ exports.deleteCartProduct = (req, res) => {
   req.user
     .deleteCartProduct(product_id)
     .then(() => res.redirect("/cart"))
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
