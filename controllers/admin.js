@@ -13,7 +13,7 @@ exports.addProductPage = (req, res) => {
 };
 
 exports.addProductData = (req, res, next) => {
-  const { title, price, description, imageUrl } = req.body;
+  const { title, price, description, image } = req.body;
   const user_id = req.user._id;
 
   const errors = validationResult(req);
@@ -27,7 +27,7 @@ exports.addProductData = (req, res, next) => {
       messages: errors.array(),
       product: {
         title,
-        imageUrl,
+        image,
         price,
         description
       },
@@ -38,7 +38,7 @@ exports.addProductData = (req, res, next) => {
       title,
       price,
       description,
-      imageUrl,
+      image,
       user_id
     });
     product

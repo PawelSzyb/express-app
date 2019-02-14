@@ -8,6 +8,7 @@
     class="product-form"
     action="<%= editing? '/admin/edit-product' : '/admin/add-product' %>"
     method="POST"
+    enctype="multipart/form-data"
   >
     <div class="form-control">
       <label for="title">Title</label>
@@ -19,7 +20,7 @@
         class="<%= validationErrors.find(error => error.param === 'title') ? 'is-invalid': '' %>"
       />
     </div>
-    <div class="form-control">
+    <!-- <div class="form-control">
       <label for="imageUrl">Image URL</label>
       <input
         type="text"
@@ -28,6 +29,10 @@
         value="<% if(editing || hasErrors) { %><%=product.imageUrl%><% } %>"
         class="<%= validationErrors.find(error => error.param === 'imageUrl') ? 'is-invalid': '' %>"
       />
+    </div> -->
+    <div class="form-control">
+      <label for="imageUrl">Image</label>
+      <input type="file" name="image" id="image" />
     </div>
     <div class="form-control">
       <label for="price">Price</label>
