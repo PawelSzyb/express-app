@@ -15,6 +15,7 @@ exports.addProductPage = (req, res) => {
 exports.addProductData = (req, res, next) => {
   const { title, price, description, image } = req.body;
   const user_id = req.user._id;
+  // console.log(image);
 
   const errors = validationResult(req);
 
