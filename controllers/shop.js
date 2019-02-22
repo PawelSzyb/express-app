@@ -1,6 +1,8 @@
 const Product = require("../models/Product");
 const Order = require("../models/Order");
 // const Cart = require("../models/Cart");
+const fs = require("fs");
+const path = require("path");
 
 exports.getProductsPage = (req, res) => {
   Product.find()
@@ -137,4 +139,16 @@ exports.deleteCartProduct = (req, res) => {
       error.httpStatusCode = 500;
       return next(error);
     });
+};
+
+exports.getInvoices = (req, res, next) => {
+  const { order_id } = req.params;
+  const invoiceName = `invoice-${order_id}.pdf`;
+  const invoicePath = path.join("data", "invoices", invoiceName);
+  fs.readFile(invoicePath, (err, data) => {
+    if (err) {
+      return next(err);
+    }
+    res.send(data);
+  });
 };

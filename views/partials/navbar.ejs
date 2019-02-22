@@ -35,9 +35,8 @@
         <a href="/signup">SignUp</a>
       </li>
       <% } else { %>
-      <li class="main-header__item">
-        <% console.log( csrfToken ) %>
-        <form action="/logout" method="POST">
+      <li class="mobile-nav__item">
+        <form action="/logout" method="post">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
           <button type="submit">Logout</button>
         </form>

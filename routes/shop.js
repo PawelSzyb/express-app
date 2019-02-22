@@ -40,4 +40,8 @@ router.get("/orders", isAuthenticated, shopController.getOrdersPage);
 // @desc    Create order list
 router.post("/create-order", isAuthenticated, shopController.postOrderList);
 
+// @route   POST /orders/:order_id
+// @desc    Create order list
+router.get("/orders/:order_id", isAuthenticated, shopController.getInvoices);
+
 module.exports = router;

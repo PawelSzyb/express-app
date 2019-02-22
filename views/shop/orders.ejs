@@ -12,7 +12,8 @@
         <ul class="order__list-product">
           <% order.items.forEach(item => { %>
           <li class="order__list-details">
-            <%= item.product.title %> - <%= item.quantity %>
+            <%= item.product.title %> - <%= item.quantity %> -
+            <a href="/orders/<%= order._id %>">Get Invoice</a>
           </li>
           <% }) %>
         </ul>

@@ -51,9 +51,6 @@ router.post(
       .not()
       .isEmpty()
       .withMessage("Title is required"),
-    body("imageUrl")
-      .isURL()
-      .withMessage("Image url is not valid"),
     body("price")
       .isFloat()
       .withMessage("Price is invalid"),

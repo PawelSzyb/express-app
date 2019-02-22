@@ -1,15 +1,19 @@
-const express = require("express");
 const path = require("path");
+
+const express = require("express");
 const mongoose = require("mongoose");
 const csrf = require("csurf");
 const flash = require("connect-flash");
 const multer = require("multer");
-
 const db = require("./config/database").mongoURI;
-
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
+const bodyParser = require("body-parser");
 
+const errorsController = require("./controllers/errors");
+const User = require("./models/User");
+
+const app = express();
 const store = new MongoDBStore({
   uri: db,
   collection: "sessions"
@@ -22,34 +26,34 @@ const fileStorage = multer.diskStorage({
     cb(null, "images");
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname + "-" + new Date().toISOString());
+    cb(null, new Date().getMilliseconds().toString() + "-" + file.originalname);
   }
 });
+
 const fileFilter = (req, file, cb) => {
   if (
     file.mimetype === "image/png" ||
     file.mimetype === "image/jpg" ||
     file.mimetype === "image/jpeg"
   ) {
-    return cb(null, true);
+    cb(null, true);
   } else {
-    return cb(null, false);
+    cb(null, false);
   }
 };
-
-const app = express();
+app.set("view engine", "ejs");
+app.set("views", "views");
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const authRoutes = require("./routes/auth");
 
-const User = require("./models/User");
-
-const errorsController = require("./controllers/errors");
-
-app.set("view engine", "ejs");
-app.set("views", "views");
-
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
+);
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(
   session({
     secret: "secret",
@@ -58,12 +62,15 @@ app.use(
     store: store
   })
 );
-app.use(express.urlencoded({ extended: true }));
-app.use(multer({ storage: fileStorage, fileFilter }).single("image"));
 
 app.use(csrfProtection);
-
 app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isAuthenticated;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
 
 app.use((req, res, next) => {
   if (!req.session.user) {
@@ -82,24 +89,16 @@ app.use((req, res, next) => {
     });
 });
 
-app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isAuthenticated;
-  res.cookie("XSRF-TOKEN", req.csrfToken());
-  res.locals.csrfToken = req.csrfToken();
-  next();
-});
-
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
-
-app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/500", errorsController.get500Page);
 
 app.use(errorsController.get404Page);
 
 app.use((error, req, res, next) => {
+  console.log(error);
   res.status(500).render("500", {
     pageTitle: "Something went wrong",
     path: "/500",
