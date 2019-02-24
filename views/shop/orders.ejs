@@ -8,12 +8,12 @@
     <ul class="order__list">
       <% orders.forEach(order => { %>
       <li class="order__list-item">
+        <a href="/orders/<%= order._id %>">Get Invoice</a>
         <h3># <%= order._id %></h3>
         <ul class="order__list-product">
           <% order.items.forEach(item => { %>
           <li class="order__list-details">
             <%= item.product.title %> - <%= item.quantity %> -
-            <a href="/orders/<%= order._id %>">Get Invoice</a>
           </li>
           <% }) %>
         </ul>
