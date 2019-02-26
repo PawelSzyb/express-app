@@ -114,6 +114,26 @@ form button {
   background: rgb(250, 152, 152);
 }
 
+.pagination {
+  margin: 3rem 0;
+  text-align: center;
+}
+.pagination a {
+  padding: 1rem;
+  margin: 0 0.5rem;
+  text-decoration: none;
+  color: var(--primaryColor);
+  border: 2px solid var(--primaryColor);
+  border-radius: 5px;
+}
+
+.pagination a:hover,
+.pagination a:active, 
+.pagination a.active {
+  background-color: var(--primaryColor);
+  color: #fff;
+}
+
 @media (min-width: 600px) {
   .user__message {
     width: 50%;
