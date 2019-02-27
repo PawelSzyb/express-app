@@ -5,22 +5,23 @@ const fs = require("fs");
 const path = require("path");
 const PDFDocument = require("pdfkit");
 
-const ITEMS_PER_PAGE = 2;
+const renderProductsWithPagination = require('../helpers/renderPagination').renderProductsWithPagination
 
-exports.getProductsPage = (req, res) => {
-  Product.find()
-    .then(products => {
-      res.render("shop/product-list", {
-        products,
-        path: "/products",
-        pageTitle: "All Products"
-      });
-    })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
-    });
+exports.getProductsPage = (req, res, next) => {
+  renderProductsWithPagination(req, res, next, "shop/product-list", "/products", "All Products")
+  // Product.find()
+  //   .then(products => {
+  //     res.render("shop/product-list", {
+  //       products,
+  //       path: "/products",
+  //       pageTitle: "All Products"
+  //     });
+  //   })
+  //   .catch(err => {
+  //     const error = new Error(err);
+  //     error.httpStatusCode = 500;
+  //     return next(error);
+  //   });
 };
 
 exports.getSingleProduct = (req, res) => {
@@ -40,35 +41,8 @@ exports.getSingleProduct = (req, res) => {
     });
 };
 
-exports.getIndexPage = (req, res) => {
-  const page = +req.query.page || 1;
-  let totalItems;
-
-  Product.countDocuments()
-    .then(numProducts => {
-      totalItems = numProducts;
-      return Product.find()
-        .skip((page - 1) * ITEMS_PER_PAGE)
-        .limit(ITEMS_PER_PAGE);
-    })
-    .then(products => {
-      res.render("shop/index", {
-        products,
-        path: "/",
-        pageTitle: "Shop",
-        currentPage: page,
-        hasNextPage: ITEMS_PER_PAGE * page < totalItems,
-        hasPrevPage: page > 1,
-        nextPage: page + 1,
-        prevPage: page - 1,
-        // lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE)
-      });
-    })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
-    });
+exports.getIndexPage = (req, res, next) => {
+  renderProductsWithPagination(req, res, next, 'shop/index', "/", "Shop")
 };
 
 exports.getCheckoutPage = (req, res) => {

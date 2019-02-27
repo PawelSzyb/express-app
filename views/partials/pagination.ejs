@@ -1,9 +1,10 @@
 <section class="pagination">
   <% if(hasPrevPage) { %>
-  <a href="/?page=<%= prevPage %>" class="">Prev</a>
+  <a href="?page=<%= prevPage %>" class="">Prev</a>
   <% } %>
-  <a href="/?page=<%= currentPage %>" class="active"><%= currentPage %></a>
+  <a href="?page=<%= currentPage %>" class="active">
+    <%= currentPage %></a>
   <% if(hasNextPage) { %>
-  <a href="/?page=<%= nextPage %>" class="">Next</a>
+  <a href="?page=<%= nextPage %>" class="">Next</a>
   <% } %>
 </section>

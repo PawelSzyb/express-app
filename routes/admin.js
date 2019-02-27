@@ -1,7 +1,9 @@
 const adminController = require("../controllers/admin");
 const isAuthenticated = require("../middleware/is-authenticated");
 
-const { body } = require("express-validator/check");
+const {
+  body
+} = require("express-validator/check");
 
 const express = require("express");
 const router = express.Router();
@@ -20,13 +22,13 @@ router.post(
   "/add-product",
   [
     body("title")
-      .trim()
-      .not()
-      .isEmpty()
-      .withMessage("Title is required"),
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Title is required"),
     body("price")
-      .isFloat()
-      .withMessage("Price is invalid"),
+    .isFloat()
+    .withMessage("Price is invalid"),
     body("description").trim()
   ],
   isAuthenticated,
@@ -47,21 +49,21 @@ router.post(
   "/edit-product",
   [
     body("title")
-      .trim()
-      .not()
-      .isEmpty()
-      .withMessage("Title is required"),
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Title is required"),
     body("price")
-      .isFloat()
-      .withMessage("Price is invalid"),
+    .isFloat()
+    .withMessage("Price is invalid"),
     body("description").trim()
   ],
   isAuthenticated,
   adminController.postEditProductData
 );
 
-// @route   POST admin/edit-product
+// @route   DELETE admin/edit-product
 // @desc    delete product
-router.post("/delete-product", isAuthenticated, adminController.deleteProduct);
+router.delete("/product/:product_id", isAuthenticated, adminController.deleteProduct);
 
 module.exports = router;

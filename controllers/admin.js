@@ -1,5 +1,7 @@
 const Product = require("../models/Product");
-const { validationResult } = require("express-validator/check");
+const {
+  validationResult
+} = require("express-validator/check");
 const deleteFile = require("../helpers/file").deleteFile;
 
 exports.addProductPage = (req, res) => {
@@ -14,7 +16,11 @@ exports.addProductPage = (req, res) => {
 };
 
 exports.addProductData = (req, res, next) => {
-  const { title, price, description } = req.body;
+  const {
+    title,
+    price,
+    description
+  } = req.body;
   const image = req.file;
   const user_id = req.user._id;
   // console.log(image);
@@ -27,7 +33,9 @@ exports.addProductData = (req, res, next) => {
       path: "/admin/add-product",
       editing: false,
       hasErrors: true,
-      messages: [{ msg: "Attached file is not an image" }],
+      messages: [{
+        msg: "Attached file is not an image"
+      }],
       product: {
         title,
         price,
@@ -102,7 +110,12 @@ exports.getEditProductPage = (req, res, next) => {
 };
 
 exports.postEditProductData = (req, res) => {
-  const { product_id, title, description, price } = req.body;
+  const {
+    product_id,
+    title,
+    description,
+    price
+  } = req.body;
   const image = req.file;
   const user_id = req.user._id;
   const errors = validationResult(req);
@@ -159,27 +172,40 @@ exports.postEditProductData = (req, res) => {
 };
 
 exports.deleteProduct = (req, res, next) => {
-  const { product_id } = req.body;
+  const {
+    product_id
+  } = req.params;
+
   Product.findById(product_id)
     .then(product => {
       if (!product) {
         return next(new Error("Product not found"));
       }
       deleteFile(product.imageUrl);
-      return Product.deleteOne({ _id: product_id, user_id: req.user._id });
+      return Product.deleteOne({
+        _id: product_id,
+        user_id: req.user._id
+      });
     })
     .then(product => {
-      res.redirect("/admin/products");
+      res.status(200).json({
+        msg: "SUCESS"
+      })
     })
     .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
+      res.status(500).json({
+        msg: "Deleting product failed"
+      })
+      // const error = new Error(err);
+      // error.httpStatusCode = 500;
+      // return next(error);
     });
 };
 
 exports.getProductsPage = (req, res) => {
-  Product.find({ user_id: req.user._id })
+  Product.find({
+      user_id: req.user._id
+    })
     // .populate("user_id", "name")
     // .select("-price")
     .then(products => {

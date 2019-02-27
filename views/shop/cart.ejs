@@ -1,17 +1,16 @@
-<%- include("../partials/header.ejs") %> <%- include("../partials/navbar.ejs")
+<%- include("../partials/header.ejs") %>
+<%- include("../partials/navbar.ejs")
 %>
 <main>
   <% if(products.length > 0) {%>
   <ul class="cart__item-list">
     <% products.forEach((el) => { %>
     <li class="cart__item">
-      <p><%= el.product_id.title %> <span>- <%= el.quantity%></span></p>
+      <p>
+        <%= el.product_id.title %> <span>-
+          <%= el.quantity%></span></p>
       <form action="/cart-delete-item" method="POST">
-        <input
-          type="hidden"
-          name="product_id"
-          value="<%= el.product_id._id %>"
-        />
+        <input type="hidden" name="product_id" value="<%= el.product_id._id %>" />
         <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
         <button class="btn danger" type="submit">Delete</button>
       </form>
@@ -27,4 +26,5 @@
   <% } %>
 </main>
 
-%> <%- include("../partials/footer.ejs") %>
+%>
+<%- include("../partials/footer.ejs") %>
